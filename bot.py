@@ -47,8 +47,7 @@ async def add(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_regions[chat_id].append(region)
         await update.message.reply_text(f"✅ Додано область: {region}")
     else:
-        await update.message.reply_text("❗ Вкажіть назву області після команди, наприклад:
-`/add Київська`")
+        await update.message.reply_text("❗ Вкажіть назву області після команди, наприклад:\n/add Київська")
 
 if __name__ == "__main__":
     app = ApplicationBuilder().token(config.TOKEN).build()
