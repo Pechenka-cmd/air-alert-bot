@@ -15,7 +15,7 @@ def fetch_alerts():
     except:
         return []
 
-async def check_alerts(context):
+async def check_alerts(bot):
     data = fetch_alerts()
     for chat_id, regions in user_regions.items():
         for region in regions:
@@ -31,7 +31,7 @@ async def check_alerts(context):
             if last_status != is_alarm:
                 latest_status[key] = is_alarm
                 msg = f"🚨 Повітряна тривога в {region}!" if is_alarm else f"✅ Відбій тривоги в {region}."
-                await context.bot.send_message(chat_id=chat_id, text=msg)
+                await bot.send_message(chat_id=chat_id, text=msg)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
@@ -54,6 +54,6 @@ if __name__ == "__main__":
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("add", add))
     scheduler = BackgroundScheduler()
-    scheduler.add_job(lambda: app.create_task(check_alerts(ContextTypes.DEFAULT_TYPE())), "interval", seconds=30)
+    scheduler.add_job(lambda: app.create_task(check_alerts(app.bot)), "interval", seconds=30)
     scheduler.start()
     app.run_polling()
